@@ -26,6 +26,15 @@ class TopicsController < ApplicationController
     @topic.votes.create
     redirect_to(topics_path)
   end 
+  
+  def downvote
+    @topic = Topic.find(params[:id])
+    @topic.votes.last?{ @topic.votes.last.destroy} 
+    
+    
+    redirect_to(topics_path)
+  end
+  
 
 
   # POST /topics
