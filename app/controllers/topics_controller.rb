@@ -4,7 +4,8 @@ class TopicsController < ApplicationController
   # GET /topics
   # GET /topics.json
   def index
-    @topics = Topic.all
+    @topics = Topic.all.order(:desc)
+    
   end
 
   # GET /topics/1
@@ -29,12 +30,17 @@ class TopicsController < ApplicationController
   
   def downvote
     @topic = Topic.find(params[:id])
-    @topic.votes.last?{ @topic.votes.last.destroy} 
-    
-    
+    if @topic.votes.last != nil
+      @topic.votes.last.destroy
+       redirect_to(topics_path)
+    else  
+      flash[:notice] = "The vote is alread 0 , cannot be -1 "
     redirect_to(topics_path)
+    end
   end
   
+  def about
+  end
 
 
   # POST /topics

@@ -2,9 +2,12 @@ Suggestotron::Application.routes.draw do
   resources :topics do 
       member do
          post 'upvote'
-         post 'downvote' 
+         post 'downvote'
+       
       end 
   end
+  
+  get "about" => "topics#about" 
 
   root 'topics#index'
   # The priority is based upon order of creation: first created -> highest priority.
