@@ -4,7 +4,8 @@ class TopicsController < ApplicationController
   # GET /topics
   # GET /topics.json
   def index
-    @topics = Topic.all.order(:desc)
+    @topics = Topic.all.order("votecount DESC")
+    #@topics = Topic.all 
     
   end
 
@@ -25,6 +26,9 @@ class TopicsController < ApplicationController
   def upvote
     @topic = Topic.find(params[:id])
     @topic.votes.create
+    @topic.votecount = @topic.votes.count 
+    @topic.save
+
     redirect_to(topics_path)
   end 
   
@@ -32,6 +36,8 @@ class TopicsController < ApplicationController
     @topic = Topic.find(params[:id])
     if @topic.votes.last != nil
       @topic.votes.last.destroy
+      @topic.votecount = @topic.votes.count
+      @topic.save
        redirect_to(topics_path)
     else  
       flash[:notice] = "The vote is alread 0 , cannot be -1 "
@@ -47,6 +53,8 @@ class TopicsController < ApplicationController
   # POST /topics.json
   def create
     @topic = Topic.new(topic_params)
+    @topic.votecount = 0
+
 
     respond_to do |format|
       if @topic.save
